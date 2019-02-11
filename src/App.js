@@ -16,8 +16,9 @@ const App = () => {
     setLoading(true)
     try {
       const { data } = await axios.get(`http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}`)
+      const newData = _.orderBy(data, sortField, sort)
       setLoading(false)
-      setData(data)
+      setData(newData)
     } catch (e) {
       setLoading(false)
       console.error(e)
@@ -41,7 +42,7 @@ const App = () => {
   return (
     <div className="container">
       <h1>React</h1>
-      {loading ? <Loader/> : <Table onSort={onSort} data={data}/>}
+      {loading ? <Loader/> : <Table sort={sort} sortField={sortField} onSort={onSort} data={data}/>}
     </div>
   )
 }

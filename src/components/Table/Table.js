@@ -1,15 +1,15 @@
 import React from 'react'
 
-const Table = ({ data, onSort }) => {
+const Table = ({ data, onSort, sortField, sort }) => {
   return (
     <table className="table">
       <thead>
         <tr>
-          <th onClick={() => onSort('id')}>ID</th>
-          <th onClick={() => onSort('firstName')}>First Name</th>
-          <th onClick={() => onSort('lastName')}>Last NAme</th>
-          <th onClick={() => onSort('email')}>Email</th>
-          <th onClick={() => onSort('phone')}>Phone</th>
+          <th onClick={() => onSort('id')}>ID {sortField === 'id' ? <small>{sort}</small> : null } </th>
+          <th onClick={() => onSort('firstName')}>First Name {sortField === 'firstName' ? <small>{sort}</small> : null } </th>
+          <th onClick={() => onSort('lastName')}>Last NAme {sortField === 'lastName' ? <small>{sort}</small> : null }</th>
+          <th onClick={() => onSort('email')}>Email {sortField === 'email' ? <small>{sort}</small> : null }</th>
+          <th onClick={() => onSort('phone')}>Phone {sortField === 'phone' ? <small>{sort}</small> : null }</th>
         </tr>
       </thead>
       <tbody>
