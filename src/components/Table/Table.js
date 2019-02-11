@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Table = ({ data, onSort, sortField, sort }) => {
+const Table = ({ data, onSort, sortField, sort, onSelect }) => {
   return (
     <table className="table">
       <thead>
@@ -14,7 +14,7 @@ const Table = ({ data, onSort, sortField, sort }) => {
       </thead>
       <tbody>
         {data && data.map(item => (
-          <tr key={item.id + item.phone}>
+          <tr key={item.id + item.phone} onClick={() => onSelect(item)}>
             <td>{item.id}</td>
             <td>{item.firstName}</td>
             <td>{item.lastName}</td>

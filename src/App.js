@@ -4,6 +4,7 @@ import axios from 'axios'
 import Loader from './components/Loader/Loader'
 import Table from './components/Table/Table'
 import _ from 'lodash'
+import DetailRowView from './components/DetailRowView/DetailRowView'
 
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [loading, setLoading] = useState(false)
   const [sort, setSort] = useState('asc')  // asc || desc
   const [sortField, setSortField] = useState('id')
+  const [row, setRow] = useState(null)
 
   const fetchData = async () => {
     setLoading(true)
@@ -39,10 +41,16 @@ const App = () => {
     setSortField(sortField)
   }
 
+  const onSelect = (item) => {
+    console.log('select', item)
+    setRow(item)
+  }
+
   return (
     <div className="container">
       <h1>React</h1>
-      {loading ? <Loader/> : <Table sort={sort} sortField={sortField} onSort={onSort} data={data}/>}
+      {loading ? <Loader/> : <Table onSelect={onSelect} sort={sort} sortField={sortField} onSort={onSort} data={data}/>}
+      {row && <DetailRowView row={row}/>}
     </div>
   )
 }
