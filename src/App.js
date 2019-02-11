@@ -5,6 +5,7 @@ import Loader from './components/Loader/Loader'
 import Table from './components/Table/Table'
 import _ from 'lodash'
 import DetailRowView from './components/DetailRowView/DetailRowView'
+import ModeSelector from './components/ModeSelector/ModeSelector'
 
 
 const App = () => {
@@ -13,11 +14,13 @@ const App = () => {
   const [sort, setSort] = useState('asc')  // asc || desc
   const [sortField, setSortField] = useState('id')
   const [row, setRow] = useState(null)
+  const [mode, setMode] = useState(false)
 
-  const fetchData = async () => {
+
+  const fetchData = async (url) => {
     setLoading(true)
     try {
-      const { data } = await axios.get(`http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}`)
+      const { data } = await axios.get(url)
       const newData = _.orderBy(data, sortField, sort)
       setLoading(false)
       setData(newData)
@@ -44,6 +47,22 @@ const App = () => {
   const onSelect = (item) => {
     console.log('select', item)
     setRow(item)
+  }
+
+  const onLoad = (url) => {
+    setMode(true)
+    setLoading(true)
+
+    fetchData(url)
+  }
+
+
+  if (!mode) {
+    return (
+      <div className="container">
+        <ModeSelector onLoad={onLoad}/>
+      </div>
+    )
   }
 
   return (
