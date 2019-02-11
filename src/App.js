@@ -3,11 +3,14 @@ import './App.css'
 import axios from 'axios'
 import Loader from './components/Loader/Loader'
 import Table from './components/Table/Table'
+import _ from 'lodash'
 
 
 const App = () => {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
+  const [sort, setSort] = useState('asc')  // asc || desc
+  const [sortField, setSortField] = useState('id')
 
   const fetchData = async () => {
     setLoading(true)
@@ -26,11 +29,19 @@ const App = () => {
     fetchData()
   }, [])
 
+  const onSort = (sortField) => {
+    const sortedData = [...data]
+    const sortType = sort === 'asc' ? 'desc' : 'asc'
+    const orderedData = _.orderBy(sortedData, sortField, sortType)
+    setData(orderedData)
+    setSort(sortType)
+    setSortField(sortField)
+  }
 
   return (
     <div className="container">
       <h1>React</h1>
-      {loading ? <Loader/> : <Table data={data}/>}
+      {loading ? <Loader/> : <Table onSort={onSort} data={data}/>}
     </div>
   )
 }
