@@ -48,7 +48,6 @@ const App = () => {
   }
 
   const onSelect = (item) => {
-    console.log('select', item)
     setRow(item)
   }
 
@@ -60,9 +59,9 @@ const App = () => {
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected)
-    console.log(selected)
   }
 
+  const displayData = _.chunk(data, pageSize)[currentPage]
 
   if (!mode) {
     return (
@@ -75,7 +74,7 @@ const App = () => {
   return (
     <div className="container">
       <h1>React</h1>
-      {loading ? <Loader/> : <Table onSelect={onSelect} sort={sort} sortField={sortField} onSort={onSort} data={data}/>}
+      {loading ? <Loader/> : <Table onSelect={onSelect} sort={sort} sortField={sortField} onSort={onSort} data={displayData}/>}
       {data && data.length > pageSize &&
       <ReactPaginate
         previousLabel={'<'}
