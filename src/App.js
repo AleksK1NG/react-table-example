@@ -6,6 +6,7 @@ import Table from './components/Table/Table'
 import _ from 'lodash'
 import DetailRowView from './components/DetailRowView/DetailRowView'
 import ModeSelector from './components/ModeSelector/ModeSelector'
+import ReactPaginate from 'react-paginate'
 
 
 const App = () => {
@@ -15,7 +16,9 @@ const App = () => {
   const [sortField, setSortField] = useState('id')
   const [row, setRow] = useState(null)
   const [mode, setMode] = useState(false)
-
+  const [pageSize, setpageSize] = useState(10)
+  const [pageCount, setPageCount] = useState(20)
+  const [currentPage, setCurrentPage] = useState(0)
 
   const fetchData = async (url) => {
     setLoading(true)
@@ -52,8 +55,12 @@ const App = () => {
   const onLoad = (url) => {
     setMode(true)
     setLoading(true)
-
     fetchData(url)
+  }
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected)
+    console.log(selected)
   }
 
 
@@ -69,6 +76,25 @@ const App = () => {
     <div className="container">
       <h1>React</h1>
       {loading ? <Loader/> : <Table onSelect={onSelect} sort={sort} sortField={sortField} onSort={onSort} data={data}/>}
+      {data && data.length > pageSize &&
+      <ReactPaginate
+        previousLabel={'<'}
+        nextLabel={'>'}
+        breakLabel={'...'}
+        breakClassName={'break-me'}
+        pageCount={pageCount}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={handlePageClick}
+        containerClassName={'pagination'}
+        activeClassName={'active'}
+        pageClassName="page-item"
+        pageLinkClassName="page-link"
+        previousClassName="page-item"
+        nextClassName="page-item"
+        previousLinkClassName="page-link"
+        nextLinkClassName="page-link"
+      />}
       {row && <DetailRowView row={row}/>}
     </div>
   )
