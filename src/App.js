@@ -7,6 +7,7 @@ import _ from 'lodash'
 import DetailRowView from './components/DetailRowView/DetailRowView'
 import ModeSelector from './components/ModeSelector/ModeSelector'
 import ReactPaginate from 'react-paginate'
+import TableSearch from './components/TableSearch/TableSearch'
 
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
   const [pageSize, setpageSize] = useState(10)
   const [pageCount, setPageCount] = useState(20)
   const [currentPage, setCurrentPage] = useState(0)
+  const [search, setSearch] = useState('')
 
   const fetchData = async (url) => {
     setLoading(true)
@@ -61,7 +63,25 @@ const App = () => {
     setCurrentPage(selected)
   }
 
-  const displayData = _.chunk(data, pageSize)[currentPage]
+  const getFilteredData = () => {
+    if (!search) return data
+    return data.filter(item => {
+      return item.firstName.toLowerCase().includes(search.toLowerCase())
+        || item.lastName.toLowerCase().includes(search.toLowerCase())
+        || item.email.toLowerCase().includes(search.toLowerCase())
+    })
+  }
+
+  const handleSearch = (searchValue) => {
+    setSearch(searchValue)
+    setCurrentPage(0)
+  }
+
+
+  const filteredData = getFilteredData()
+  // const displayData = _.chunk(data, pageSize)[currentPage]
+  const displayData = _.chunk(filteredData, pageSize)[currentPage]
+
 
   if (!mode) {
     return (
@@ -74,7 +94,14 @@ const App = () => {
   return (
     <div className="container">
       <h1>React</h1>
-      {loading ? <Loader/> : <Table onSelect={onSelect} sort={sort} sortField={sortField} onSort={onSort} data={displayData}/>}
+
+      {loading
+        ? <Loader/>
+        : <React.Fragment>
+          <TableSearch onSearch={handleSearch}/>
+          <Table onSelect={onSelect} sort={sort} sortField={sortField} onSort={onSort} data={displayData}/>
+        </React.Fragment>}
+
       {data && data.length > pageSize &&
       <ReactPaginate
         previousLabel={'<'}
@@ -93,6 +120,7 @@ const App = () => {
         nextClassName="page-item"
         previousLinkClassName="page-link"
         nextLinkClassName="page-link"
+        forcePage={currentPage}
       />}
       {row && <DetailRowView row={row}/>}
     </div>
@@ -100,8 +128,3 @@ const App = () => {
 }
 
 export default App
-
-
-
-
-
